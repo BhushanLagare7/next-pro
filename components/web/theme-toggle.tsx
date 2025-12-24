@@ -2,7 +2,7 @@
 
 import { useTheme } from "next-themes";
 
-import { MoonIcon, SunIcon } from "@hugeicons/core-free-icons";
+import { Moon02Icon, SunIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 
 import { Button } from "@/components/ui/button";
@@ -26,7 +26,7 @@ export function ThemeToggle() {
           className="h-[1.2rem] w-[1.2rem] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90"
         />
         <HugeiconsIcon
-          icon={MoonIcon}
+          icon={Moon02Icon}
           className="h-[1.2rem] w-[1.2rem] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0"
         />
         <span className="sr-only">Toggle theme</span>
