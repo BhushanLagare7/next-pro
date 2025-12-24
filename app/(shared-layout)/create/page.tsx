@@ -37,19 +37,13 @@ const CreatePage = () => {
     defaultValues: {
       title: "",
       content: "",
+      image: undefined,
     },
   });
 
   const onSubmit = async (values: z.infer<typeof postSchema>) => {
     startTransition(async () => {
-      try {
-        await createBlogAction(values);
-        form.reset();
-        toast.success("Post created successfully");
-      } catch (error) {
-        toast.error("Failed to create post");
-        console.error(error);
-      }
+      await createBlogAction(values);
     });
   };
 
@@ -99,6 +93,28 @@ const CreatePage = () => {
                       aria-invalid={fieldState.invalid}
                       placeholder="Enter your blog content"
                       {...field}
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+              <Controller
+                name="image"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field>
+                    <FieldLabel>Image</FieldLabel>
+                    <Input
+                      aria-invalid={fieldState.invalid}
+                      placeholder="Upload your image"
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        field.onChange(file || null);
+                      }}
                     />
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />

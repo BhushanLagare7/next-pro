@@ -18,9 +18,10 @@ export const PostsSection = async () => {
         <Card key={post._id} className="pt-0">
           <div className="overflow-hidden relative w-full h-48">
             <Image
-              src={`https://picsum.photos/seed/${post._id}/400/500`}
+              src={post.imageUrl ?? "/placeholder.png"}
               alt={post.title}
               fill
+              className="object-cover"
             />
           </div>
 
