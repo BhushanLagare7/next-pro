@@ -55,16 +55,16 @@ const CreatePage = () => {
 
   return (
     <div className="py-12">
-      <div className="text-center mb-12">
+      <div className="mb-12 text-center">
         <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl">
           Create New Post
         </h1>
-        <p className="text-xl text-muted-foreground pt-4">
+        <p className="pt-4 text-xl text-muted-foreground">
           Use this space to share your thoughts and ideas with the world.
         </p>
       </div>
 
-      <Card className="w-full max-w-xl mx-auto">
+      <Card className="mx-auto w-full max-w-xl">
         <CardHeader>
           <CardTitle>Create Blog Article</CardTitle>
           <CardDescription>Create a new blog article</CardDescription>
@@ -112,7 +112,7 @@ const CreatePage = () => {
                     <HugeiconsIcon
                       icon={Loading03Icon}
                       strokeWidth={2}
-                      className="size-4 animate-spin"
+                      className="animate-spin size-4"
                     />
                     <span>Loading...</span>
                   </>

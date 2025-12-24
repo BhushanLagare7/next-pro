@@ -113,7 +113,7 @@ const LoginPage = () => {
                   <HugeiconsIcon
                     icon={Loading03Icon}
                     strokeWidth={2}
-                    className="size-4 animate-spin"
+                    className="animate-spin size-4"
                   />
                   <span>Loading...</span>
                 </>
