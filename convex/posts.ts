@@ -15,7 +15,7 @@ export const createPost = mutation({
     if (!user) {
       throw new ConvexError({
         code: "UNAUTHORIZED",
-        message: "User not found",
+        message: "You must be logged in to create a post",
       });
     }
 
@@ -59,10 +59,35 @@ export const generateImageUploadUrl = mutation({
     if (!user) {
       throw new ConvexError({
         code: "UNAUTHORIZED",
-        message: "User not found",
+        message: "You must be logged in to upload an image",
       });
     }
 
     return await ctx.storage.generateUploadUrl();
+  },
+});
+
+export const getPostById = query({
+  args: {
+    postId: v.id("posts"),
+  },
+  handler: async (ctx, args) => {
+    const post = await ctx.db.get("posts", args.postId);
+
+    if (!post) {
+      throw new ConvexError({
+        code: "NOT_FOUND",
+        message: "Post not found",
+      });
+    }
+
+    const resolvedImageUrl = post.imageStorageId
+      ? await ctx.storage.getUrl(post.imageStorageId)
+      : null;
+
+    return {
+      ...post,
+      imageUrl: resolvedImageUrl,
+    };
   },
 });
