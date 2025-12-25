@@ -5,6 +5,9 @@ import {
   PostsSectionSkeleton,
 } from "@/components/web/posts-section";
 
+export const dynamic = "force-static";
+export const revalidate = 30;
+
 const BlogPage = async () => {
   return (
     <div className="py-12">

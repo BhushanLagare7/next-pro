@@ -130,7 +130,7 @@ const CreatePage = () => {
                       strokeWidth={2}
                       className="animate-spin size-4"
                     />
-                    <span>Loading...</span>
+                    <span>Creating...</span>
                   </>
                 ) : (
                   <span>Create Post</span>

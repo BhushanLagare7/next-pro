@@ -9,7 +9,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="flex justify-center items-center min-h-screen">
       <div className="absolute top-5 left-5">
-        <Link href="/" className={buttonVariants({ variant: "secondary" })}>
+        <Link href="/" className={buttonVariants({ variant: "outline" })}>
           <HugeiconsIcon icon={ArrowLeft} className="size-4" />
           Back to Home
         </Link>

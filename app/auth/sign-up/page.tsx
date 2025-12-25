@@ -134,7 +134,7 @@ const SignUpPage = () => {
                     strokeWidth={2}
                     className="animate-spin size-4"
                   />
-                  <span>Loading...</span>
+                  <span>Signing up...</span>
                 </>
               ) : (
                 <span>Sign Up</span>
