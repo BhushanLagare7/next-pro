@@ -4,7 +4,7 @@ import { useTransition } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useParams } from "next/navigation";
 
-import { useMutation, useQuery } from "convex/react";
+import { Preloaded, useMutation, usePreloadedQuery } from "convex/react";
 import { toast } from "sonner";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -22,12 +22,18 @@ import { Field, FieldError, FieldLabel } from "../ui/field";
 import { Separator } from "../ui/separator";
 import { Textarea } from "../ui/textarea";
 
-export const CommentsSection = () => {
+interface CommentsSectionProps {
+  preloadedComments: Preloaded<typeof api.comments.getCommentsByPostId>;
+}
+
+export const CommentsSection = ({
+  preloadedComments,
+}: CommentsSectionProps) => {
   const { postId } = useParams<{ postId: Id<"posts"> }>();
 
   const [isPending, startTransition] = useTransition();
 
-  const comments = useQuery(api.comments.getCommentsByPostId, { postId });
+  const comments = usePreloadedQuery(preloadedComments);
 
   const createComment = useMutation(api.comments.createComment);
 
