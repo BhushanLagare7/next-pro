@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { Metadata } from "next";
 
 import {
   PostsSection,
@@ -7,6 +8,22 @@ import {
 
 export const dynamic = "force-static";
 export const revalidate = 30;
+
+// TODO: Update metadata
+export const metadata: Metadata = {
+  title: "Blog | NextPro",
+  description: "Insights, thoughts, and trends from our team.",
+  openGraph: {
+    title: "Blog | NextPro",
+    description: "Insights, thoughts, and trends from our team.",
+    type: "website",
+    locale: "en_US",
+    siteName: "NextPro",
+  },
+  creator: "Bhushan Lagare",
+  publisher: "Bhushan Lagare",
+  category: "Web Development",
+};
 
 const BlogPage = async () => {
   return (

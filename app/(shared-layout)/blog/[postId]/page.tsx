@@ -1,25 +1,64 @@
+import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
-import { fetchQuery } from "convex/nextjs";
+import { fetchQuery, preloadQuery } from "convex/nextjs";
 import { ArrowLeft } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 
+import { getToken } from "@/lib/auth-server";
+
 import { buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { CommentsSection } from "@/components/web/comments-section";
+import { PostPresence } from "@/components/web/post-presence";
 
 interface PostIdPageProps {
   params: Promise<{ postId: Id<"posts"> }>;
 }
 
-const PostIdPage = async ({ params }: PostIdPageProps) => {
+// TODO: Update metadata
+export async function generateMetadata({
+  params,
+}: PostIdPageProps): Promise<Metadata> {
   const { postId } = await params;
 
   const post = await fetchQuery(api.posts.getPostById, { postId });
+
+  if (!post) {
+    return {
+      title: "Post not found",
+      description: "Post not found",
+    };
+  }
+
+  return {
+    title: `${post.title} | NextPro`,
+    description: post.body,
+    openGraph: {
+      title: post.title,
+      description: post.body,
+      type: "website",
+      locale: "en_US",
+      siteName: "NextPro",
+    },
+    publisher: "Bhushan Lagare",
+  };
+}
+
+const PostIdPage = async ({ params }: PostIdPageProps) => {
+  const { postId } = await params;
+
+  const token = await getToken();
+
+  const [post, preloadedComments, userId] = await Promise.all([
+    fetchQuery(api.posts.getPostById, { postId }),
+    preloadQuery(api.comments.getCommentsByPostId, { postId }),
+    fetchQuery(api.presence.getUserId, {}, { token }),
+  ]);
 
   if (!post) {
     return (
@@ -53,9 +92,12 @@ const PostIdPage = async ({ params }: PostIdPageProps) => {
           {post.title}
         </h1>
 
-        <p className="text-sm text-muted-foreground">
-          Posted on: {new Date(post._creationTime).toLocaleDateString()}
-        </p>
+        <div className="flex gap-2 items-center">
+          <p className="text-sm text-muted-foreground">
+            Posted on: {new Date(post._creationTime).toLocaleDateString()}
+          </p>
+          {userId && <PostPresence roomId={post._id} userId={userId} />}
+        </div>
       </div>
 
       <Separator className="my-8" />
@@ -66,7 +108,7 @@ const PostIdPage = async ({ params }: PostIdPageProps) => {
 
       <Separator className="my-8" />
 
-      <CommentsSection />
+      <CommentsSection preloadedComments={preloadedComments} />
     </div>
   );
 };

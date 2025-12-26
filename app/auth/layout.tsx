@@ -1,9 +1,16 @@
+import { Metadata } from "next";
 import Link from "next/link";
 
 import { ArrowLeft } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 
 import { buttonVariants } from "@/components/ui/button";
+
+// TODO: Update metadata
+export const metadata: Metadata = {
+  title: "Authentication | NextPro",
+  description: "Authenticate to access your account",
+};
 
 const AuthLayout = ({ children }: { children: React.ReactNode }) => {
   return (
