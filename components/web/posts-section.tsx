@@ -1,8 +1,8 @@
-// import { cacheLife, cacheTag } from "next/cache";
+import { cacheLife, cacheTag } from "next/cache";
 import Image from "next/image";
 import Link from "next/link";
-import { connection } from "next/server";
 
+// import { connection } from "next/server";
 import { fetchQuery } from "convex/nextjs";
 
 import { api } from "@/convex/_generated/api";
@@ -12,10 +12,10 @@ import { Card, CardContent, CardFooter } from "../ui/card";
 import { Skeleton } from "../ui/skeleton";
 
 export const PostsSection = async () => {
-  // "use cache";
-  // cacheLife("hours");
-  // cacheTag("blog");
-  await connection();
+  "use cache";
+  cacheLife("hours");
+  cacheTag("blog");
+  // await connection();
   const posts = await fetchQuery(api.posts.getPosts);
 
   return (
