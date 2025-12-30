@@ -20,10 +20,13 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// TODO: ADD DETAILS OF THE APP
 export const metadata: Metadata = {
-  title: "NextPro",
-  description: "NextPro",
+  title: {
+    default: "NextPro",
+    template: "%s | NextPro",
+  },
+  description:
+    "A modern full-stack application built with Next.js, Convex, and TypeScript. Create, share, and engage with blog posts in real-time.",
   keywords: [
     "NextPro",
     "Next.js",
@@ -31,9 +34,37 @@ export const metadata: Metadata = {
     "TypeScript",
     "Convex",
     "Tailwind CSS",
+    "Blog",
+    "Real-time",
   ],
   authors: [{ name: "Bhushan Lagare" }],
+  creator: "Bhushan Lagare",
   publisher: "Bhushan Lagare",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    siteName: "NextPro",
+    title: "NextPro",
+    description:
+      "A modern full-stack application built with Next.js, Convex, and TypeScript.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "NextPro",
+    description:
+      "A modern full-stack application built with Next.js, Convex, and TypeScript.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
 };
 
 export default function RootLayout({

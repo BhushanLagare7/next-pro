@@ -6,10 +6,22 @@ import { HugeiconsIcon } from "@hugeicons/react";
 
 import { buttonVariants } from "@/components/ui/button";
 
-// TODO: Update metadata
 export const metadata: Metadata = {
-  title: "Authentication | NextPro",
-  description: "Authenticate to access your account",
+  title: "Authentication",
+  description:
+    "Sign in or create an account to access NextPro. Secure authentication for your blog experience.",
+  openGraph: {
+    title: "Authentication | NextPro",
+    description:
+      "Sign in or create an account to access NextPro. Secure authentication for your blog experience.",
+    type: "website",
+    locale: "en_US",
+    siteName: "NextPro",
+  },
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 const AuthLayout = ({ children }: { children: React.ReactNode }) => {
