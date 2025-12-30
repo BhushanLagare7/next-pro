@@ -1,3 +1,23 @@
+/**
+ * Comments Section Component
+ *
+ * Displays blog post comments with a form for adding new comments.
+ * Uses Convex preloaded queries for server-side rendering and real-time updates.
+ *
+ * @remarks
+ * Data Flow:
+ * 1. Comments preloaded on server (SSR) via preloadAuthQuery
+ * 2. Client hydrates with usePreloadedQuery (instant display, no loading)
+ * 3. New comments trigger real-time updates via Convex subscriptions
+ *
+ * Form Handling:
+ * - React Hook Form for form state management
+ * - Zod schema validation via zodResolver
+ * - useTransition for non-blocking submit
+ *
+ * @see {@link commentSchema} - Validation schema for comment form
+ */
+
 "use client";
 
 import { useTransition } from "react";
@@ -22,10 +42,30 @@ import { Field, FieldError, FieldLabel } from "../ui/field";
 import { Separator } from "../ui/separator";
 import { Textarea } from "../ui/textarea";
 
+/**
+ * Props for the comments section component.
+ *
+ * @remarks
+ * preloadedComments is a Convex Preloaded type that contains
+ * serialized query results from server-side rendering.
+ * This enables instant display without client-side loading states.
+ */
 interface CommentsSectionProps {
   preloadedComments: Preloaded<typeof api.comments.getCommentsByPostId>;
 }
 
+/**
+ * Comment section with form and list display.
+ *
+ * @param preloadedComments - Server-preloaded comments for instant hydration
+ *
+ * @remarks
+ * Form Submission Flow:
+ * 1. Validate against commentSchema
+ * 2. Execute createComment mutation via Convex
+ * 3. Reset form on success, show toast
+ * 4. Convex automatically updates UI (real-time subscription)
+ */
 export const CommentsSection = ({
   preloadedComments,
 }: CommentsSectionProps) => {
@@ -57,6 +97,7 @@ export const CommentsSection = ({
     });
   };
 
+  // Loading state while hydrating preloaded data
   if (comments === undefined) {
     return (
       <Card>
@@ -78,6 +119,7 @@ export const CommentsSection = ({
         <h2 className="text-xl font-bold">{comments.length} Comments</h2>
       </CardHeader>
       <CardContent className="space-y-8">
+        {/* Comment submission form */}
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <Controller
             name="body"
@@ -115,6 +157,7 @@ export const CommentsSection = ({
 
         {comments.length > 0 && <Separator />}
 
+        {/* Comments list with avatar and metadata */}
         <section className="space-y-6">
           {comments.map((comment) => (
             <div key={comment._id} className="flex gap-4">

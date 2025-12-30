@@ -1,3 +1,24 @@
+/**
+ * Search Input Component
+ *
+ * Real-time search autocomplete for blog posts using Convex reactive queries.
+ * Displays search results in a dropdown as user types.
+ *
+ * @remarks
+ * Real-Time Search Pattern:
+ * - User types in input (controlled component)
+ * - After 2+ characters, Convex query fires automatically
+ * - Results update in real-time via Convex subscriptions
+ * - No explicit debounce needed (Convex handles query optimization)
+ *
+ * "skip" Parameter:
+ * When query is < 2 chars, we pass "skip" instead of args.
+ * This tells Convex to not execute the query at all,
+ * avoiding unnecessary backend calls for empty/short queries.
+ *
+ * @see {@link api.posts.searchPost} - Server-side search implementation
+ */
+
 import { useState } from "react";
 import Link from "next/link";
 
@@ -9,10 +30,24 @@ import { api } from "@/convex/_generated/api";
 
 import { Input } from "../ui/input";
 
+/**
+ * Search input with real-time autocomplete dropdown.
+ *
+ * @remarks
+ * State Management:
+ * - searchQuery: Current input value
+ * - open: Whether dropdown is visible
+ *
+ * Results Behavior:
+ * - undefined: Query is loading
+ * - []: No matches found
+ * - [...]: List of matching posts
+ */
 export const SearchInput = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [open, setOpen] = useState(false);
 
+  // Skip query if less than 2 characters (avoid noise from single-char searches)
   const results = useQuery(
     api.posts.searchPost,
     searchQuery.length >= 2 ? { query: searchQuery, limit: 5 } : "skip"
@@ -39,9 +74,11 @@ export const SearchInput = () => {
         />
       </div>
 
+      {/* Dropdown only visible when open AND query is long enough */}
       {open && searchQuery.length >= 2 && (
         <div className="absolute top-full mt-2 rounded-md border shadow-md outline-none bg-popover text-popover-foreground animate-in fade-in-0 zoom-in-95">
           {results === undefined ? (
+            // Loading state while query executes
             <div className="flex justify-center items-center p-4 text-sm text-muted-foreground">
               <HugeiconsIcon
                 icon={Loading03Icon}
@@ -51,10 +88,12 @@ export const SearchInput = () => {
               <span>Searching...</span>
             </div>
           ) : results.length === 0 ? (
+            // No results found
             <p className="p-4 text-sm text-center text-muted-foreground">
               No results found
             </p>
           ) : (
+            // Results list with links to post detail pages
             <div className="py-1">
               {results.map((post) => (
                 <Link

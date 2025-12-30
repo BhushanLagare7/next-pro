@@ -1,3 +1,25 @@
+/**
+ * Navigation Bar Component
+ *
+ * Main navigation component with responsive design and auth-aware rendering.
+ * Displays different actions based on user authentication state.
+ *
+ * @remarks
+ * Authentication Flow:
+ * - Unauthenticated: Shows Sign Up and Login buttons
+ * - Authenticated: Shows Logout button
+ * - Loading: Hides auth buttons to prevent flash of incorrect state
+ *
+ * Features:
+ * - Brand logo with home link
+ * - Navigation links (Home, Blog, Create)
+ * - Search input (hidden on mobile)
+ * - Theme toggle (dark/light mode)
+ * - Auth actions (context-dependent)
+ *
+ * Uses Convex's useConvexAuth hook for real-time auth state sync.
+ */
+
 "use client";
 
 import Link from "next/link";
@@ -13,6 +35,17 @@ import { Button, buttonVariants } from "../ui/button";
 import { SearchInput } from "./search-input";
 import { ThemeToggle } from "./theme-toggle";
 
+/**
+ * Navbar component with auth-aware actions.
+ *
+ * @remarks
+ * Logout Flow:
+ * Uses authClient.signOut() which:
+ * 1. Invalidates the session cookie
+ * 2. Triggers Convex auth state update
+ * 3. Shows success/error toast
+ * 4. Redirects to home on success
+ */
 export const Navbar = () => {
   const { isAuthenticated, isLoading } = useConvexAuth();
   const router = useRouter();
@@ -43,6 +76,7 @@ export const Navbar = () => {
         <div className="hidden mr-2 md:block">
           <SearchInput />
         </div>
+        {/* Hide auth buttons while loading to prevent flash of incorrect state */}
         {isLoading ? null : isAuthenticated ? (
           <Button
             onClick={() =>
