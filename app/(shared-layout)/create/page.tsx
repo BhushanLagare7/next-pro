@@ -115,6 +115,9 @@ const CreatePage = () => {
                         field.onChange(file || null);
                       }}
                     />
+                    <span className="text-muted-foreground text-xs">
+                      Note: Size should be less than 1MB
+                    </span>
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
                     )}

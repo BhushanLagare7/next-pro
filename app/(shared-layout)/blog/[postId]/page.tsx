@@ -21,7 +21,6 @@ interface PostIdPageProps {
   params: Promise<{ postId: Id<"posts"> }>;
 }
 
-// TODO: Update metadata
 export async function generateMetadata({
   params,
 }: PostIdPageProps): Promise<Metadata> {
@@ -32,19 +31,30 @@ export async function generateMetadata({
   if (!post) {
     return {
       title: "Post not found",
-      description: "Post not found",
+      description: "The requested post could not be found.",
     };
   }
 
+  const truncatedDescription =
+    post.body.length > 160 ? `${post.body.substring(0, 157)}...` : post.body;
+
   return {
-    title: `${post.title} | NextPro`,
-    description: post.body,
+    title: post.title,
+    description: truncatedDescription,
     openGraph: {
       title: post.title,
-      description: post.body,
-      type: "website",
+      description: truncatedDescription,
+      type: "article",
       locale: "en_US",
       siteName: "NextPro",
+      publishedTime: new Date(post._creationTime).toISOString(),
+      images: post.imageUrl ? [{ url: post.imageUrl, alt: post.title }] : [],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: truncatedDescription,
+      images: post.imageUrl ? [post.imageUrl] : [],
     },
     publisher: "Bhushan Lagare",
   };

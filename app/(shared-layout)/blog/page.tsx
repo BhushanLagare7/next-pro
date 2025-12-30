@@ -6,16 +6,23 @@ import {
   PostsSectionSkeleton,
 } from "@/components/web/posts-section";
 
-// TODO: Update metadata
 export const metadata: Metadata = {
-  title: "Blog | NextPro",
-  description: "Insights, thoughts, and trends from our team.",
+  title: "Blog",
+  description:
+    "Explore insights, thoughts, and trends from our team. Stay updated with the latest in web development and technology.",
   openGraph: {
     title: "Blog | NextPro",
-    description: "Insights, thoughts, and trends from our team.",
+    description:
+      "Explore insights, thoughts, and trends from our team. Stay updated with the latest in web development and technology.",
     type: "website",
     locale: "en_US",
     siteName: "NextPro",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Blog | NextPro",
+    description:
+      "Explore insights, thoughts, and trends from our team. Stay updated with the latest in web development and technology.",
   },
   creator: "Bhushan Lagare",
   publisher: "Bhushan Lagare",
