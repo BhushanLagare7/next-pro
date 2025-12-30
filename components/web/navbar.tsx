@@ -10,6 +10,7 @@ import { authClient } from "@/lib/auth-client";
 
 import { Button, buttonVariants } from "../ui/button";
 
+import { SearchInput } from "./search-input";
 import { ThemeToggle } from "./theme-toggle";
 
 export const Navbar = () => {
@@ -17,15 +18,15 @@ export const Navbar = () => {
   const router = useRouter();
 
   return (
-    <nav className="w-full py-5 flex items-center justify-between">
-      <div className="flex items-center gap-8">
+    <nav className="flex justify-between items-center py-5 w-full">
+      <div className="flex gap-8 items-center">
         <Link href="/">
           <h1 className="text-3xl font-bold">
             Next<span className="text-primary">Pro</span>
           </h1>
         </Link>
 
-        <div className="flex items-center gap-2">
+        <div className="flex gap-2 items-center">
           <Link href="/" className={buttonVariants({ variant: "ghost" })}>
             Home
           </Link>
@@ -38,7 +39,10 @@ export const Navbar = () => {
         </div>
       </div>
 
-      <div className="flex items-center gap-2">
+      <div className="flex gap-2 items-center">
+        <div className="hidden mr-2 md:block">
+          <SearchInput />
+        </div>
         {isLoading ? null : isAuthenticated ? (
           <Button
             onClick={() =>

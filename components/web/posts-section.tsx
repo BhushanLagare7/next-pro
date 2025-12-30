@@ -1,3 +1,4 @@
+import { cacheLife, cacheTag } from "next/cache";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -10,6 +11,9 @@ import { Card, CardContent, CardFooter } from "../ui/card";
 import { Skeleton } from "../ui/skeleton";
 
 export const PostsSection = async () => {
+  "use cache";
+  cacheLife("hours");
+  cacheTag("blog");
   const posts = await fetchQuery(api.posts.getPosts);
 
   return (
