@@ -1,3 +1,30 @@
+/**
+ * Root Layout Component
+ *
+ * Defines the base HTML structure and global providers for the entire application.
+ * This layout wraps all pages and establishes core functionality like theming,
+ * authentication state, and database connectivity.
+ *
+ * @remarks
+ * Font Strategy:
+ * - Noto Sans: Primary body font (variable --font-sans)
+ * - Geist Sans: Modern sans-serif for headings/UI
+ * - Geist Mono: Code blocks and technical content
+ * All fonts loaded via Next.js font optimization for performance
+ *
+ * Metadata Strategy:
+ * Comprehensive SEO optimization including:
+ * - Title templates for consistent branding
+ * - Open Graph tags for social sharing
+ * - Twitter Card support
+ * - Search engine directives
+ *
+ * Provider Nesting Order (outer to inner):
+ * 1. ThemeProvider - Dark/light mode support
+ * 2. ConvexClientProvider - Real-time database & auth
+ * 3. Page content - Individual routes
+ */
+
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Noto_Sans } from "next/font/google";
 
@@ -8,13 +35,16 @@ import { ConvexClientProvider } from "./ConvexClientProvider";
 
 import "./globals.css";
 
+// Primary font for body text - supports wide character range
 const notoSans = Noto_Sans({ variable: "--font-sans" });
 
+// Modern sans-serif for UI elements and headings
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
 });
 
+// Monospace font for code snippets and technical content
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
@@ -67,6 +97,17 @@ export const metadata: Metadata = {
   },
 };
 
+/**
+ * Root layout function component.
+ *
+ * @param children - Nested page content and route segments
+ *
+ * @remarks
+ * - suppressHydrationWarning on html tag prevents theme flash warnings
+ * - Noto Sans applied to html for global CSS variable availability
+ * - Geist fonts applied to body via className for Tailwind access
+ * - antialiased class improves font rendering across browsers
+ */
 export default function RootLayout({
   children,
 }: Readonly<{

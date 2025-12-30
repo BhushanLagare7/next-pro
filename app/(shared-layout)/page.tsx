@@ -1,5 +1,29 @@
+/**
+ * Landing Page
+ *
+ * Marketing homepage showcasing the platform's value proposition and community focus.
+ * Features responsive layout with theme-aware imagery and quote from Next.js creator.
+ *
+ * @remarks
+ * Design Strategy:
+ * - Hero section with community-driven messaging
+ * - Dual image display (theme-responsive: dark/light variants)
+ * - Blockquote from authority figure for credibility
+ * - Responsive grid layout (mobile-first, stacks on small screens)
+ *
+ * The page is intentionally static (no data fetching) for fast initial load
+ * and serves as the first impression for new visitors.
+ */
+
 import Image from "next/image";
 
+/**
+ * Landing page component.
+ *
+ * @remarks
+ * Images use Next.js Image component for automatic optimization.
+ * Theme-specific images improve visual consistency in dark/light modes.
+ */
 export default function Page() {
   return (
     <section className="py-16 md:py-32">

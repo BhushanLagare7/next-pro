@@ -1,3 +1,23 @@
+/**
+ * Blog Listing Page
+ *
+ * Displays all blog posts with search and filtering capabilities.
+ * Uses React Suspense for streaming data from Convex, showing skeleton
+ * while posts load and allowing the page shell to render immediately.
+ *
+ * @remarks
+ * Suspense Benefits:
+ * - Immediate page shell rendering (header, title visible instantly)
+ * - Progressive enhancement (posts stream in when ready)
+ * - Proper loading states without manual isLoading flags
+ * - Required for Next.js production builds with uncached data
+ *
+ * SEO Optimization:
+ * - Static metadata for consistent social sharing
+ * - Category tagging for content classification
+ * - Open Graph and Twitter Card support
+ */
+
 import { Suspense } from "react";
 import { Metadata } from "next";
 
@@ -29,6 +49,17 @@ export const metadata: Metadata = {
   category: "Web Development",
 };
 
+/**
+ * Blog listing page component.
+ *
+ * @remarks
+ * Server component (async) that delegates data fetching to PostsSection.
+ * Suspense boundary ensures:
+ * 1. Page header/title render immediately
+ * 2. PostsSection can fetch data asynchronously
+ * 3. Skeleton shows during data load
+ * 4. No layout shift when content appears
+ */
 const BlogPage = async () => {
   return (
     <div className="py-12">

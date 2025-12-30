@@ -1,3 +1,26 @@
+/**
+ * Individual Post Detail Page
+ *
+ * Displays a single blog post with its full content, image, metadata, and comments.
+ * Implements dynamic routing via [postId] parameter and generates SEO metadata per post.
+ *
+ * @remarks
+ * Key Features:
+ * - Dynamic route parameter for post identification
+ * - Parallel data fetching (post + comments + user) via Promise.all
+ * - generateMetadata for dynamic SEO tags (title, description, OG images)
+ * - Auth-gated viewing (redirects if not logged in)
+ * - Real-time presence tracking (shows who else is viewing)
+ * - Comment system with preloaded data
+ *
+ * Data Fetching Strategy:
+ * - Post data: fetchQuery (fully loads for metadata)
+ * - Comments: preloadQuery (starts loading, data passed to client component)
+ * - User ID: fetchQuery with auth token (required for presence)
+ *
+ * @see {@link https://nextjs.org/docs/app/api-reference/functions/generate-metadata} - Dynamic Metadata
+ */
+
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -21,6 +44,25 @@ interface PostIdPageProps {
   params: Promise<{ postId: Id<"posts"> }>;
 }
 
+/**
+ * Generates dynamic metadata for each post.
+ *
+ * Called by Next.js during build/request to create page-specific SEO tags.
+ * Fetches post data to populate title, description, and Open Graph metadata.
+ *
+ * @param params - Route parameters containing postId
+ * @returns Metadata object with post-specific SEO tags
+ *
+ * @remarks
+ * SEO Strategy:
+ * - Uses post title as page title
+ * - Truncates body to 160 chars for meta description (Google's preferred length)
+ * - Includes Open Graph image from post (for social sharing previews)
+ * - Sets type="article" for proper content classification
+ * - Includes publishedTime for article freshness signals
+ *
+ * Fallback behavior: Returns generic "Post not found" metadata if post doesn't exist.
+ */
 export async function generateMetadata({
   params,
 }: PostIdPageProps): Promise<Metadata> {
@@ -35,6 +77,7 @@ export async function generateMetadata({
     };
   }
 
+  // Truncate description to optimal length for search engines and social previews
   const truncatedDescription =
     post.body.length > 160 ? `${post.body.substring(0, 157)}...` : post.body;
 
@@ -60,17 +103,39 @@ export async function generateMetadata({
   };
 }
 
+/**
+ * Post detail page component.
+ *
+ * @param params - Route parameters containing post ID
+ *
+ * @remarks
+ * Parallel Data Fetching:
+ * Uses Promise.all to fetch post, comments, and user ID simultaneously,
+ * reducing total wait time compared to sequential fetches.
+ *
+ * Auth Strategy:
+ * - Checks for valid user ID (from auth token)
+ * - Redirects to login if unauthenticated
+ * - Prevents unauthorized users from viewing post content
+ *
+ * preloadQuery vs fetchQuery:
+ * - fetchQuery: Fully loads data on server (needed for post display)
+ * - preloadQuery: Starts loading, passes reference to client component
+ *   (allows CommentsSection to subscribe to real-time updates)
+ */
 const PostIdPage = async ({ params }: PostIdPageProps) => {
   const { postId } = await params;
 
   const token = await getToken();
 
+  // Parallel data fetching for optimal performance
   const [post, preloadedComments, userId] = await Promise.all([
     fetchQuery(api.posts.getPostById, { postId }),
     preloadQuery(api.comments.getCommentsByPostId, { postId }),
     fetchQuery(api.presence.getUserId, {}, { token }),
   ]);
 
+  // Auth gate: redirect if user not authenticated
   if (!userId) {
     return redirect("/auth/login");
   }

@@ -1,3 +1,25 @@
+/**
+ * ESLint Configuration for Next.js Application
+ *
+ * Extends Next.js recommended configs with custom import sorting rules to maintain
+ * consistent, scannable import organization across the codebase.
+ *
+ * @remarks
+ * Import sorting strategy enforces a predictable order:
+ * 1. React/Next.js framework imports (always first for immediate dependency recognition)
+ * 2. Third-party libraries (clear separation from internal code)
+ * 3. Internal absolute imports with @ alias
+ * 4. Specific feature folders (lib, components, utils, hooks)
+ * 5. Parent-relative imports (..)
+ * 6. Sibling-relative imports (.)
+ * 7. Side-effect imports (CSS, global effects)
+ *
+ * This ordering improves code review by making import sources immediately scannable
+ * and reduces merge conflicts by standardizing import placement.
+ *
+ * @see {@link https://github.com/lydell/eslint-plugin-simple-import-sort} - Simple Import Sort Plugin
+ */
+
 import { defineConfig, globalIgnores } from "eslint/config";
 import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTs from "eslint-config-next/typescript";

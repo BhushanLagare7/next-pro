@@ -1,3 +1,27 @@
+/**
+ * Create Post Page
+ *
+ * Client-side form for creating new blog posts with real-time validation.
+ * Uses React Hook Form with Zod for type-safe validation and optimistic UI updates.
+ *
+ * @remarks
+ * Form Architecture:
+ * - react-hook-form: Form state management and validation
+ * - zodResolver: Bridges Zod schema with React Hook Form
+ * - Controller: Connects controlled inputs to form state
+ * - useTransition: Manages server action pending state
+ *
+ * Validation Strategy:
+ * - Client-side validation via Zod schema (instant feedback)
+ * - Server-side validation in createBlogAction (security)
+ * - Field-level error display (aria-invalid for accessibility)
+ *
+ * Why Client Component:
+ * Requires useState (useForm, useTransition) and event handlers,
+ * which can only run client-side. The server action handles
+ * the actual mutation securely.
+ */
+
 "use client";
 
 import { useTransition } from "react";
@@ -28,6 +52,20 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
+/**
+ * Create post page component.
+ *
+ * @remarks
+ * useTransition Hook:
+ * - Marks server action as non-blocking transition
+ * - Keeps UI responsive during submission
+ * - Enables loading state (isPending) for button feedback
+ *
+ * React Hook Form Setup:
+ * - zodResolver ensures form data matches postSchema before submission
+ * - defaultValues prevent "uncontrolled to controlled" warnings
+ * - undefined for image allows proper file input reset
+ */
 const CreatePage = () => {
   const [isPending, startTransition] = useTransition();
 
@@ -36,10 +74,29 @@ const CreatePage = () => {
     defaultValues: {
       title: "",
       content: "",
-      image: undefined,
+      image: undefined, // File inputs need explicit undefined default
     },
   });
 
+  /**
+   * Form submission handler.
+   *
+   * @param values - Validated form data matching postSchema
+   *
+   * @remarks
+   * startTransition wraps the async server action to:
+   * - Mark it as a non-urgent update (React 18 Transitions)
+   * - Keep the UI interactive during submission
+   * - Automatically set isPending state
+   *
+   * The server action handles:
+   * - Re-validation (never trust client-side validation alone)
+   * - Authentication check
+   * - Image upload to Convex
+   * - Database mutation
+   * - Cache invalidation
+   * - Redirect to blog listing
+   */
   const onSubmit = async (values: z.infer<typeof postSchema>) => {
     startTransition(async () => {
       await createBlogAction(values);

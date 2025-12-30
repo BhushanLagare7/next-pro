@@ -1,3 +1,26 @@
+/**
+ * Login Page
+ *
+ * Client-side authentication form using Better Auth for email/password login.
+ * Provides instant validation feedback and handles auth errors gracefully.
+ *
+ * @remarks
+ * Authentication Flow:
+ * 1. Client-side validation via Zod schema (instant feedback)
+ * 2. Form submission triggers Better Auth client
+ * 3. Better Auth handles password verification
+ * 4. Success: Show toast, redirect to homepage
+ * 5. Error: Show specific error message via toast
+ *
+ * Error Handling Strategy:
+ * - Network errors: caught by fetchOptions.onError
+ * - Validation errors: displayed inline via FieldError
+ * - Auth errors: displayed as toast notifications (better UX than inline)
+ * - Redirects happen only on successful authentication
+ *
+ * @see {@link https://better-auth.com} - Better Auth Documentation
+ */
+
 "use client";
 
 import { useTransition } from "react";
@@ -30,6 +53,13 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 
+/**
+ * Login page component.
+ *
+ * @remarks
+ * useRouter for programmatic navigation after successful login.
+ * useTransition provides loading state during async auth operation.
+ */
 const LoginPage = () => {
   const router = useRouter();
 
@@ -43,16 +73,33 @@ const LoginPage = () => {
     },
   });
 
+  /**
+   * Handles login form submission.
+   *
+   * @param values - Validated email and password from form
+   *
+   * @remarks
+   * Better Auth Pattern:
+   * - authClient.signIn.email() handles password hashing and verification
+   * - fetchOptions callbacks handle success/error states
+   * - Cookies/session are automatically managed by Better Auth
+   * - No manual token storage needed (handled by Better Auth internals)
+   *
+   * Toast notifications provide non-blocking feedback without
+   * disrupting the UI flow or requiring modal dialogs.
+   */
   const onSubmit = (values: z.infer<typeof loginSchema>) => {
     startTransition(async () => {
       await authClient.signIn.email({
         email: values.email,
         password: values.password,
         fetchOptions: {
+          // Success: notify user and redirect to homepage
           onSuccess: () => {
             toast.success("Logged in successfully");
             router.push("/");
           },
+          // Error: show specific error message (e.g., "Invalid credentials")
           onError: (error) => {
             toast.error(error.error.message || "Failed to log in");
           },
