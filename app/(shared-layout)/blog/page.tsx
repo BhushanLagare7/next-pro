@@ -1,6 +1,10 @@
+import { Suspense } from "react";
 import { Metadata } from "next";
 
-import { PostsSection } from "@/components/web/posts-section";
+import {
+  PostsSection,
+  PostsSectionSkeleton,
+} from "@/components/web/posts-section";
 
 // TODO: Update metadata
 export const metadata: Metadata = {
@@ -30,7 +34,9 @@ const BlogPage = async () => {
         </p>
       </div>
 
-      <PostsSection />
+      <Suspense fallback={<PostsSectionSkeleton />}>
+        <PostsSection />
+      </Suspense>
     </div>
   );
 };
