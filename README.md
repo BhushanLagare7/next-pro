@@ -95,6 +95,6 @@ We welcome contributions to Next Pro!
 
 If you encounter any issues or have questions, please:
 
-- Check the [Issues](https://github.com/yourusername/next-pro/issues) page.
+- Check the [Issues](https://github.com/BhushanLagare7/next-pro/issues) page.
 - Review the [Convex Documentation](https://docs.convex.dev/) for backend-related queries.
 - Refer to the [Next.js Documentation](https://nextjs.org/docs) for framework specifics.
