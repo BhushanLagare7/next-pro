@@ -1,13 +1,6 @@
-import { Suspense } from "react";
 import { Metadata } from "next";
 
-import {
-  PostsSection,
-  PostsSectionSkeleton,
-} from "@/components/web/posts-section";
-
-export const dynamic = "force-static";
-export const revalidate = 30;
+import { PostsSection } from "@/components/web/posts-section";
 
 // TODO: Update metadata
 export const metadata: Metadata = {
@@ -37,9 +30,7 @@ const BlogPage = async () => {
         </p>
       </div>
 
-      <Suspense fallback={<PostsSectionSkeleton />}>
-        <PostsSection />
-      </Suspense>
+      <PostsSection />
     </div>
   );
 };

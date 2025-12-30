@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { fetchMutation } from "convex/nextjs";
@@ -69,7 +69,7 @@ export const createBlogAction = async (values: z.infer<typeof postSchema>) => {
     };
   }
 
-  revalidatePath("/blog");
+  updateTag("blog");
 
   return redirect("/blog");
 };

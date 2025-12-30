@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 import { fetchQuery, preloadQuery } from "convex/nextjs";
 import { ArrowLeft } from "@hugeicons/core-free-icons";
@@ -59,6 +60,10 @@ const PostIdPage = async ({ params }: PostIdPageProps) => {
     preloadQuery(api.comments.getCommentsByPostId, { postId }),
     fetchQuery(api.presence.getUserId, {}, { token }),
   ]);
+
+  if (!userId) {
+    return redirect("/auth/login");
+  }
 
   if (!post) {
     return (
